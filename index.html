@@ -21,6 +21,16 @@
     --radius: 14px;
   }
 
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+
+  *:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
   * { box-sizing: border-box; }
 
   html, body {
@@ -173,6 +183,7 @@
     padding-bottom: 4px;
     margin-bottom: 26px;
     scrollbar-width: none;
+    mask-image: linear-gradient(90deg, transparent, #000 16px, #000 calc(100% - 16px), transparent);
   }
   .tabs::-webkit-scrollbar { display: none; }
 
@@ -219,6 +230,11 @@
     .grid { grid-template-columns: 1fr; }
   }
 
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
   .card {
     background: var(--card);
     border-radius: var(--radius);
@@ -230,6 +246,7 @@
     transition: transform .15s ease, box-shadow .15s ease;
     position: relative;
     overflow: hidden;
+    animation: cardIn .45s cubic-bezier(.16,.84,.44,1) backwards;
   }
 
   .card:hover {
@@ -246,7 +263,8 @@
   .card .idx {
     font-size: 10px;
     color: var(--card-muted);
-    letter-spacing: 0.06em;
+    letter-spacing: 0.08em;
+    opacity: .7;
   }
 
   .card .label {
@@ -422,6 +440,7 @@ function render(filter = '') {
       a.href = l.url;
       a.target = '_blank';
       a.rel = 'noopener noreferrer';
+      a.style.animationDelay = `${Math.min(i, 10) * 35}ms`;
       a.innerHTML = `
         <div class="content">
           <span class="idx">${cat.name.toUpperCase()}</span>
@@ -445,3 +464,4 @@ render();
 
 </body>
 </html>
+
